@@ -1,6 +1,6 @@
 # sam-boilerplate
 
-This is a boilerplate repo for aws sam
+This is a repo for building a centralised ssm
 
 ## Deploy Local
 
