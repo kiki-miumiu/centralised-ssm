@@ -20,12 +20,12 @@ Parameters:
   OrganizationArn:
     Description: put the arn of either an organisation or organisation unit
     Type: String
-    Default: ""
+    Default: ""    
 Resources:   # Add Resource here
   CrossAccountSharedParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: /cns/resources/latest_linux_ami
+      Name: latest_linux_ami
       Tier: Advanced
       Type: String
       Value: "ami-12345"
@@ -38,11 +38,11 @@ Resources:   # Add Resource here
     Type: "AWS::RAM::ResourceShare"
     Properties:
       Name: !Ref Name
+      AllowExternalPrincipals: false
       ResourceArns:
-        - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${CrossAccountSharedParameter}"
+        - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${CrossAccountSharedParameter}"
       Principals:
-        - "093171196188"
-        # - !Ref OrganizationArn
+        - !Ref OrganizationArn
       Tags:
         - Key: EnvironmentType
           Value: !Ref EnvironmentType
