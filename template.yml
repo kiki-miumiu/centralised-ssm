@@ -17,4 +17,35 @@ Parameters:
     Type: String
     AllowedPattern: ".+"
     Default: Platform
+  OrganizationArn:
+    Description: put the arn of either an organisation or organisation unit
+    Type: String
+    Default: ""
 Resources:   # Add Resource here
+  CrossAccountSharedParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /cns/resources/latest_linux_ami
+      Tier: Advanced
+      Type: String
+      Value: "ami-12345"
+      Description: Centralised cross account shared parameter for latest golden linux ami 
+      Tags:
+        EnvironmentType: !Ref EnvironmentType
+        Owner: !Ref Owner
+
+  RAMSharedSSM:
+    Type: "AWS::RAM::ResourceShare"
+    Properties:
+      Name: !Ref Name
+      ResourceArns:
+        - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${CrossAccountSharedParameter}"
+      Principals:
+        - "093171196188"
+        # - !Ref OrganizationArn
+      Tags:
+        - Key: EnvironmentType
+          Value: !Ref EnvironmentType
+        - Key: Owner
+          Value: !Ref Owner
+
